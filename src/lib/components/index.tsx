@@ -9,3 +9,4 @@ export { default as InfoButton } from './InfoButton';
 export { default as SetupPasswordModal } from './SetupPasswordModal';
 export { default as PasswordInput } from './PasswordInput';
 export { default as Toast } from './Toast';
+export { default as CloseButton } from './CloseButton';

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import { Platform, StatusBar } from 'react-native';
 import { AppLoading } from 'expo';
 import { NavigationActions } from 'react-navigation';
 
@@ -36,11 +36,17 @@ const App = () => {
 
   return (
     <>
+      <StatusBar hidden />
       {initialized 
         ? <AppContainer ref={ref => setNavigation(ref)} />
         : <AppLoading />
       }
-      {toasts.map(text => <Toast text={text}/>)}
+      {toasts.map((text, i) => (
+        <Toast 
+          key={String(i)}
+          text={text}
+        />
+      ))}
     </>
   )
 }

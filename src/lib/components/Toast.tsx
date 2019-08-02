@@ -14,7 +14,7 @@ interface Props {
 
 const Container = styled(Animated.View)`
   position: absolute;
-  top: 20px;
+  top: 55px;
   align-self: center;
   height: 50px;
   width: 250px;

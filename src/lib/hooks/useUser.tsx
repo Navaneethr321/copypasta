@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import { PasteTypes } from '../types';
 import { 
@@ -10,12 +10,12 @@ import {
 
 const useUser = () => {
   const [data, setData] = useState(null);
+  const unsubSnap = useRef(null);
 
   useEffect(() => {
-    let unsubSnapshot = () => {};
     const unsubAuth = auth.onAuthStateChanged(user => {
       if (!user) return;
-      unsubSnapshot = (
+      unsubSnap.current = (
         db.collection('users')
           .doc(user.uid)
           .onSnapshot(snap => {
@@ -31,8 +31,10 @@ const useUser = () => {
       );
     });
     return () => {
-      unsubSnapshot();
       unsubAuth();
+      if (unsubSnap.current) {
+        unsubSnap.current();
+      }
     };
   }, []);
 
@@ -48,7 +50,18 @@ const useUser = () => {
       });
   };
 
+  const signOut = async () => {
+    if (unsubSnap.current) {
+      unsubSnap.current();
+    }
+    await auth.signOut();
+    setTimeout(() => {
+      setData(null);
+    }, 300);
+  }
+
   return {
+    signOut,
     addPaste,
     userData: data,
   };

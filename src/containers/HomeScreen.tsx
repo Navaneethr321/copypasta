@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect, useState } from 'react';
+import React, { FC, memo, useState } from 'react';
 import { Clipboard } from 'react-native'; 
 import styled from 'styled-components/native';
 
@@ -51,7 +51,6 @@ const PastesContainer = styled.View`
   margin-top: 15px;
   height: 60%;
   width: 100%;
-  overflow-y: hidden;
 `;
 
 const PasteInput = styled(Input).attrs(({
@@ -63,16 +62,16 @@ const HomeScreen: FC = memo(() => {
   const [text, setText] = useState('');
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const { displayToast } = useToasts();
-  const { userData, addPaste } = useUser();
+  const { userData, addPaste, signOut } = useUser();
 
-  const didClickAddPaste = () => {
+  const didAddPaste = () => {
     addPaste(text);
     displayToast('pasted text!');
     setText('');
   }
 
   const didClickLogOut = async () => {
-    await auth.signOut();
+    await signOut();
     navigation.navigate(Routes.Login);
   }
 
@@ -84,7 +83,7 @@ const HomeScreen: FC = memo(() => {
     setPasswordModalVisible(false);
   }
 
-  const handlePastePress = async (text: string) => {
+  const didClickPaste = async (text: string) => {
     await Clipboard.setString(text);
     displayToast('copied text!');
   }
@@ -106,17 +105,18 @@ const HomeScreen: FC = memo(() => {
               <PasteInput 
                 value={text}
                 onChangeText={setText}
+                onSubmitEditing={didAddPaste}
               />
               {text !== '' && (
                 <PasteCheck 
-                  onPress={didClickAddPaste}
+                  onPress={didAddPaste}
                 />
               )}
             </PasteContainer>
             <PastesContainer>
               <PastesList 
                 pastes={userData.pastes}
-                onPastePress={handlePastePress}
+                onPastePress={didClickPaste}
               />
             </PastesContainer>  
           </StyledContent>

@@ -2,7 +2,12 @@ import styled from 'styled-components/native';
 
 import { colors } from '../constants';
 
-const Input = styled.TextInput`
+const Input = styled.TextInput.attrs(({
+  returnKeyType: 'done',
+  autoCapitalize: 'none',
+  underlineColorAndroid: 'transparent',
+  placeholderTextColor: colors.lightGray,
+}))`
   width: 100%;
   min-height: 50px;
   padding: 8px;

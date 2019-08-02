@@ -21,7 +21,7 @@ const Spacer = styled.View`
 `;
 
 const Gradient = styled(LinearGradient).attrs(({
-  colors: [colors.black, 'transparent'],
+  colors:[colors.black, 'rgba(36, 37, 41, 0)'],
 }))`
   top: 0;
   left: 0;
@@ -32,7 +32,7 @@ const Gradient = styled(LinearGradient).attrs(({
 `;
 
 const BottomGradient = styled(LinearGradient).attrs(({
-  colors: ['transparent', colors.black],
+  colors:['rgba(36, 37, 41, 0)', colors.black],
 }))`
   bottom: 0;
   left: 0;
@@ -51,7 +51,6 @@ const PastesList: FC<Props> = memo(({
       ListHeaderComponent={<Spacer />}
       ListFooterComponent={<Spacer />}
       contentContainerStyle={{
-        flex: 1,
         width: '100%',
       }}
       data={pastes}

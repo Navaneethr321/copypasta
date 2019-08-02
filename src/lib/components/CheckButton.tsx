@@ -1,4 +1,5 @@
 import React, { memo, FC } from 'react';
+import { ActivityIndicator } from 'react-native';
 import styled from 'styled-components/native';
 import { Feather } from '@expo/vector-icons';
 
@@ -26,10 +27,10 @@ const CheckIcon = styled(Feather).attrs(({
   color: colors.white,
 }))``;
 
-const LoadingIndicator = styled.ActivityIndicator.attrs(({
-  size: 30,
-  color: colors.white,
-}))``;
+// const LoadingIndicator = styled.ActivityIndicator.attrs(({
+//   size: 30,
+//   color: colors.white,
+// }))``;
 
 const CheckButton: FC<Props> = memo(({
   style,
@@ -42,7 +43,7 @@ const CheckButton: FC<Props> = memo(({
     onPress={onPress}
   >
     {loading ? (
-      <LoadingIndicator />
+      <ActivityIndicator color={colors.white} />
     ): (
       <CheckIcon />
     )}

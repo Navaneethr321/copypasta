@@ -1,7 +1,8 @@
-import React, { FC, memo, useState } from 'react';
+import React, { FC, memo, useState, useRef } from 'react';
+import { KeyboardAvoidingView } from 'react-native';
 import styled from 'styled-components/native';
 
-import { Routes, colors } from '../lib/constants';
+import { Routes, colors, styles } from '../lib/constants';
 import { useNavigation } from '../lib/hooks';
 import { signIn } from '../lib/services/cloudFunctions';
 import { auth } from '../lib/services/firebase';
@@ -19,6 +20,14 @@ import {
 const ErrorText = styled.Text`
   margin-bottom: 8px;
   color: ${colors.red};
+`;
+
+const KeyboardAvoiding = styled(KeyboardAvoidingView).attrs(({
+  enabled: true,
+  behavior:'padding',
+}))`
+  width: 100%;
+  ${styles.centerContent}
 `;
 
 const UsernameInput = styled(Input).attrs(({
@@ -42,6 +51,7 @@ const initialState = {
 
 const OnboardingScreen: FC = memo(() => {
   const navigation = useNavigation();
+  const passwordRef = useRef(null);
   const [{
     loading,
     username,
@@ -54,7 +64,7 @@ const OnboardingScreen: FC = memo(() => {
     setState(s => ({ ...s, ...newState }));
   }
 
-  const handleSubmit = async () => {
+  const submitLogin = async () => {
     mergeState({ loading: true });
 
     const res = await signIn({ username, password });
@@ -93,6 +103,14 @@ const OnboardingScreen: FC = memo(() => {
     });
   }
 
+  const didEndUsernameEditing = () => {
+    if (showPassword && passwordRef.current) {
+      passwordRef.current.focus();
+      return;
+    }
+    submitLogin();
+  }
+
   const setPassword = (password: string) => {
     mergeState({ password });
   }
@@ -100,21 +118,26 @@ const OnboardingScreen: FC = memo(() => {
   return (
     <ScreenContainer>
       <Content>
-        <ErrorText>{error}</ErrorText>
-        <UsernameInput 
-          value={username}
-          onChangeText={setUsername}
-        />
-        {showPassword && (
-          <StyledPasswordInput 
-            value={password}
-            onChangeText={setPassword}
+        <KeyboardAvoiding>
+          <ErrorText>{error}</ErrorText>
+          <UsernameInput 
+            value={username}
+            onChangeText={setUsername}
+            onSubmitEditing={didEndUsernameEditing}
           />
-        )}
-        <CheckButton 
-          loading={loading}
-          onPress={handleSubmit}
-        />
+          {showPassword && (
+            <StyledPasswordInput 
+              value={password}
+              onChangeText={setPassword}
+              onSubmitEditing={submitLogin}
+              ref={ref => passwordRef.current = ref}
+            />
+          )}
+          <CheckButton 
+            loading={loading}
+            onPress={submitLogin}
+          />
+        </KeyboardAvoiding>
       </Content>
     </ScreenContainer>
   );

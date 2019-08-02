@@ -1,23 +1,29 @@
 import { useState, useEffect } from 'react';
- 
-import { toastEmitter, ToastEvents } from '../services/emitter';
+import Emitter from 'emmett';
+
+import { ToastEvents } from '../types';
+
+const toastEmitter = new Emitter();
 
 const useToasts = () => {
   const [toasts, setToasts] = useState([]);
 
   useEffect(() => {
-    toastEmitter.on('showToast', toast => {
-      setToasts(oldToasts => {
-        oldToasts.push(toast.data.text);
-        return oldToasts.slice();
-      });
-      setTimeout(() => {
+    toastEmitter.on(
+      ToastEvents.ShowToast, 
+      toast => {
         setToasts(oldToasts => {
-          oldToasts.shift();
+          oldToasts.push(toast.data.text);
           return oldToasts.slice();
         });
-      }, 2000);
-    });
+        setTimeout(() => {
+          setToasts(oldToasts => {
+            oldToasts.shift();
+            return oldToasts.slice();
+          });
+        }, 2000);
+      }
+    );
   }, []);
 
   const displayToast = (text: string) => {
