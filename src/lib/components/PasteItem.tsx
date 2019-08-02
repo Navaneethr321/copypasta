@@ -1,4 +1,5 @@
 import React, { FC, memo } from 'react';
+import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { Feather } from '@expo/vector-icons';
 import dayjs from 'dayjs';
@@ -34,6 +35,7 @@ const DateText = styled.Text`
 `;
 
 const PasteText = styled.Text`
+  width: 90%;
   color: ${colors.white};
 `;
 

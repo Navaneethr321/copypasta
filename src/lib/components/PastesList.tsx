@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { colors } from '../constants';
+import { isWeb } from '../utils';
 import { Paste } from '../types';
 import PasteItem from './PasteItem';
  
@@ -20,10 +21,7 @@ const Spacer = styled.View`
   height: 15px;
 `;
 
-const Gradient = styled(LinearGradient).attrs(({
-  colors:[colors.black, 'rgba(36, 37, 41, 0)'],
-}))`
-  top: 0;
+const Gradient = styled(LinearGradient)`
   left: 0;
   z-index: 99;
   position: absolute;
@@ -31,14 +29,16 @@ const Gradient = styled(LinearGradient).attrs(({
   width: 100%;
 `;
 
-const BottomGradient = styled(LinearGradient).attrs(({
+const TopGradient = styled(Gradient).attrs(({
+  colors:[colors.black, 'rgba(36, 37, 41, 0)'],
+}))`
+  top: 0;
+`;
+
+const BottomGradient = styled(Gradient).attrs(({
   colors:['rgba(36, 37, 41, 0)', colors.black],
 }))`
   bottom: 0;
-  left: 0;
-  position: absolute;
-  height: 20px;
-  width: 100%;
 `;
 
 const PastesList: FC<Props> = memo(({
@@ -47,13 +47,11 @@ const PastesList: FC<Props> = memo(({
 }) => (
   <ListContainer>
     <FlatList 
-      keyExtractor={({ date }) => String(date)}
+      data={pastes}
       ListHeaderComponent={<Spacer />}
       ListFooterComponent={<Spacer />}
-      contentContainerStyle={{
-        width: '100%',
-      }}
-      data={pastes}
+      contentContainerStyle={{ width: '100%' }}
+      keyExtractor={({ date }) => String(date)}
       renderItem={({ item }) => (
         <PasteItem 
           date={item.date}
@@ -62,8 +60,12 @@ const PastesList: FC<Props> = memo(({
         />
       )}
     />
-    <Gradient />
-    <BottomGradient />
+    {!isWeb && (
+      <>
+        <TopGradient />
+        <BottomGradient />
+      </>
+    )}
   </ListContainer>
 ));
 

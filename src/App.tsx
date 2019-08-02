@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Platform, StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
 import { AppLoading } from 'expo';
 import { NavigationActions } from 'react-navigation';
 
 import { auth } from './lib/services/firebase';
 import { colors, Routes } from './lib/constants';
 import { Toast } from './lib/components';
+import { isWeb } from './lib/utils';
 import { useToasts } from './lib/hooks';
 import AppContainer from './containers';
 
-if (Platform.OS === 'web') {
+if (isWeb) {
   document.body.style.backgroundColor = colors.black;
 }
 

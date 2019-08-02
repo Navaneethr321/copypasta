@@ -24,7 +24,27 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "TODO uses the camera to take pictures you want to save.",
+        "NSPhotoLibraryAddUsageDescription": "TODO uses the photo library to save pictures you want in the cloud.",
+        "NSPhotoLibraryUsageDescription": "TODO uses the photo library to save pictures you want in the cloud.",
+      }
+    },
+    "android": {
+      "versionCode": 1,
+      "package": "net.siteform.app",
+      "googleServicesFile": "./google-services.json",
+      "permissions": [
+        "CAMERA",
+        "MANAGE_DOCUMENTS",
+        "READ_PHONE_STATE",
+        "READ_EXTERNAL_STORAGE"
+      ],
+      "icon": "./src/lib/res/images/app-icon-transparent.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./src/lib/res/images/app-icon-transparent.png"
+      }
     }
   }
 }

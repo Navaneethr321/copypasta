@@ -1,5 +1,5 @@
 import React, { FC, memo, useState } from 'react';
-import { Modal as NativeModal, Platform } from 'react-native';
+import { Modal as NativeModal } from 'react-native';
 import WebModal from 'modal-enhanced-react-native-web';
 import styled from 'styled-components/native';
 
@@ -8,6 +8,7 @@ import {
   setPassword as setUserPassword
 } from '../services/cloudFunctions';
 import { useToasts } from '../hooks'; 
+import { isWeb } from '../utils';
 import PasswordInput from './PasswordInput';
 import CheckButton from './CheckButton';
 import CloseButton from './CloseButton';
@@ -49,8 +50,7 @@ const Content = styled.View`
   ${styles.centerContent}
 `;
 
-const Modal = Platform.OS === 'web' ? WebModal : NativeModal;
-
+const Modal = isWeb ? WebModal : NativeModal;
 
 const SetupPasswordModal: FC<Props> = memo(({
   visible,
@@ -88,7 +88,7 @@ const SetupPasswordModal: FC<Props> = memo(({
     >
       <Content>
         <>
-          {Platform.OS !== 'web' && (
+          {isWeb && (
             <StyledCloseButton onPress={onBackdropPress} />
           )}
           <PromptText>
